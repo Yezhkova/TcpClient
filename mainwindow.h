@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void acceptUserList(std::string userList);
+    void acceptUserList(std::string& userList);
 
 private slots:
     void on_connectButton_clicked();

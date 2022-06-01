@@ -18,13 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_connectButton_clicked()
 {
-//    std::string my_username = ui->myUsernameEdit->text().toStdString();
-//    std::string address = ui->addressEdit->text().toStdString();
-//    bool ok;
-//    int port = ui->portEdit->text().toInt(&ok);
-//    if (!ok) {
-//      std::cout << "Conversion failed. Repeat conversion" <<std::endl;
-//    }
+
 //    m_client.runContext();
 //    LOG("I am running context")
 //    m_client.connectSocket(address, port);
@@ -34,14 +28,18 @@ void MainWindow::on_connectButton_clicked()
 //    //m_client.readNextMessage();
 //    LOG("I have read next message")
 
+    std::string my_username = ui->myUsernameEdit->text().toStdString();
+    std::string address = ui->addressEdit->text().toStdString();
+    std::string port = ui->portEdit->text().toStdString();
     TcpBlockingClient c;
-    c.connect("localhost", "15001", boost::posix_time::seconds(10));
+    c.connect(address, port, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
 
-    c.write_line("init\nuser1\n", boost::posix_time::seconds(10));
+    c.sendInitMessage(my_username, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
 
     //in a separate thread
-    std::string line = c.read_line(boost::posix_time::seconds(10));
-    std::cout << "I read init message:\n" << line << '\n';
+    std::string line = c.readLine(boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+    //LOG("Line : " << line)
+    acceptUserList(line);
     // Keep going until we get back the line that was sent.
     //      if (line == argv[3])
     //        break;
@@ -49,9 +47,21 @@ void MainWindow::on_connectButton_clicked()
 
 }
 
-void MainWindow::acceptUserList(std::string userList)
+void MainWindow::acceptUserList(std::string& userList)
 {
+        char* str = &userList[0];
 
+        // Returns first token
+        char *token = strtok(str, ";");
+
+        // Keep printing tokens while one of the
+        // delimiters present in str[].
+        while (token != NULL)
+        {
+            ui->sessionsList->addItem(token);
+            printf("%s\n", token);
+            token = strtok(NULL, ";");
+        }
 }
 
 
