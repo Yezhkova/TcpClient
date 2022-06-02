@@ -1,3 +1,5 @@
+#pragma once
+
 #include <boost/asio/connect.hpp>
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/io_service.hpp>
@@ -56,6 +58,11 @@ public:
 
     // Start the persistent actor that checks for deadline expiry.
     check_deadline();
+  }
+
+  ~TcpBlockingClient()
+  {
+      LOG("TcpBlockingClient deleted")
   }
 
   void connect(const std::string& host, const std::string& service,

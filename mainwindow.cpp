@@ -5,7 +5,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_client(*this)
+    , m_client()
 {
     ui->setupUi(this);
 }
@@ -31,36 +31,47 @@ void MainWindow::on_connectButton_clicked()
     std::string my_username = ui->myUsernameEdit->text().toStdString();
     std::string address = ui->addressEdit->text().toStdString();
     std::string port = ui->portEdit->text().toStdString();
-    TcpBlockingClient c;
-    c.connect(address, port, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+    m_client.connect(address, port, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
 
-    c.sendInitMessage(my_username, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+    m_client.sendInitMessage(my_username, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
 
     //in a separate thread
-    std::string line = c.readLine(boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
-    //LOG("Line : " << line)
-    acceptUserList(line);
-    // Keep going until we get back the line that was sent.
-    //      if (line == argv[3])
-    //        break;
+    m_readThread = std::thread( [this] {
+        for(;;)
+        {
+            std::string command = m_client.readLine(boost::posix_time::pos_infin);//    boost::posix_time::seconds(10));
 
+            if(command == "list")
+            {
+                std::string userList = m_client.readLine(boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+                acceptUserList(userList);
 
+            }
+            else if(command == "msg")
+            {
+                // read receiver name;
+                std::cout <<"YEAH!\n";
+            }
+
+        }
+
+    } );
 }
 
 void MainWindow::acceptUserList(std::string& userList)
 {
         char* str = &userList[0];
-
-        // Returns first token
         char *token = strtok(str, ";");
-
-        // Keep printing tokens while one of the
-        // delimiters present in str[].
         while (token != NULL)
         {
-            ui->sessionsList->addItem(token);
-            printf("%s\n", token);
+            QList<QListWidgetItem *> items = ui->sessionsList->findItems(token, Qt::MatchExactly);
+            if(items.size() == 0)
+            {
+                ui->sessionsList->addItem(token);
+                //printf("%s\n", token);
+            }
             token = strtok(NULL, ";");
+
         }
 }
 

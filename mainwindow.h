@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "tcpclient.h"
+#include "tcpblockingclient.h"
+#include <thread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,8 +22,9 @@ private slots:
     void on_connectButton_clicked();
 
 private:
-    Ui::MainWindow *ui;
-    TcpClient m_client;
+    Ui::MainWindow      *ui;
+    TcpBlockingClient   m_client;
+    std::thread         m_readThread;
 };
 
 #endif // MAINWINDOW_H

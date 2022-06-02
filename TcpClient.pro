@@ -23,14 +23,12 @@ win32:DEFINES += _WIN32_WINNT=0x0501
 SOURCES += \
     log.cpp \
     main.cpp \
-    mainwindow.cpp \
-    tcpclient.cpp
+    mainwindow.cpp
 
 HEADERS += \
     log.h \
     mainwindow.h \
-    tcpblockingclient.h \
-    tcpclient.h
+    tcpblockingclient.h
 
 FORMS += \
     mainwindow.ui

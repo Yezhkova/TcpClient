@@ -98,6 +98,7 @@ void TcpClient::readNextMessage()
         else
         {
             LOG(error.message())
+
         }
     });
 
