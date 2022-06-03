@@ -132,8 +132,8 @@ public:
 
     if (ec)
     {
-      //throw boost::system::system_error(ec);
-        LOG("readline error: " << ec.message())
+      throw boost::system::system_error(ec);
+        //LOG("readline error: " << ec.message())
     }
 
     std::string line;
