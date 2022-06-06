@@ -21,6 +21,10 @@ public:
 private slots:
     void on_connectButton_clicked();
 
+    void on_sendButton_clicked();
+
+    void on_disconnectButton_clicked();
+
 private:
     Ui::MainWindow      *ui;
     TcpBlockingClient   m_client;

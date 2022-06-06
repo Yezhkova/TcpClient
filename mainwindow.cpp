@@ -19,20 +19,11 @@ MainWindow::~MainWindow()
 void MainWindow::on_connectButton_clicked()
 {
 
-    //    m_client.runContext();
-    //    LOG("I am running context")
-    //    m_client.connectSocket(address, port);
-    //    LOG("I have connected socket")
-    //    m_client.sendInitMessage(my_username);
-    //    LOG("I have sent init message")
-    //    //m_client.readNextMessage();
-    //    LOG("I have read next message")
-
     std::string my_username = ui->myUsernameEdit->text().toStdString();
     std::string address = ui->addressEdit->text().toStdString();
     std::string port = ui->portEdit->text().toStdString();
     m_client.connect(address, port, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
-    m_client.sendInitMessage(my_username, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+    m_client.sendCommandMessage("init", my_username, boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
     LOG(my_username)
     //in a separate thread
     m_readThread = std::thread( [this] {
@@ -51,7 +42,13 @@ void MainWindow::on_connectButton_clicked()
                 else if (command == "msg")
                 {
                     // read receiver name;
-                    std::cout <<"YEAH!\n";
+                    std::string sender = m_client.readLine(boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+                    std::string textOfMessage = m_client.readLine(boost::posix_time::pos_infin);//boost::posix_time::seconds(10));
+                    std::string tmp = sender + " : " + textOfMessage + "<br>";
+                    QString temp = ui->feed->text();
+                    temp.append(QString::fromStdString(tmp));
+                    ui->feed->setText( temp );
+                    ui->feed->setAlignment(Qt::AlignTop | Qt::AlignLeft);
                 }
 
             }
@@ -59,7 +56,7 @@ void MainWindow::on_connectButton_clicked()
         catch ( std::runtime_error &e) // catch everything
         {
             LOG("Cannot read line: " << e.what())
-
+            std::terminate();
         }
 
     } );
@@ -67,21 +64,30 @@ void MainWindow::on_connectButton_clicked()
 
 void MainWindow::acceptUserList(std::string& userList)
 {
+    ui->sessionsList->clear();
     char* str = &userList[0];
     char *token = strtok(str, ";");
-    ui->sessionsList->clear();
     while (token != NULL)
     {
-//        QList<QListWidgetItem *> items = ui->sessionsList->findItems(token, Qt::MatchExactly);
-//        if(items.size() == 0)
-//        {
-            ui->sessionsList->addItem(token);
-            //printf("%s\n", token);
-//       }
+        ui->sessionsList->addItem(token);
         token = strtok(NULL, ";");
-
     }
 }
 
+void MainWindow::on_sendButton_clicked()
+{
+    std::string my_message = ui->typeMessage->toPlainText().toStdString();
+    if(!my_message.empty())
+    {
+        m_client.sendCommandMessage("msg", my_message, boost::posix_time::pos_infin);
+    }
+    ui->typeMessage->clear();
+}
 
+
+void MainWindow::on_disconnectButton_clicked()
+{
+    this->close();
+    m_client.sendCommandMessage("disconnect", "", boost::posix_time::pos_infin);
+}
 

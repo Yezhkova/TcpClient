@@ -142,10 +142,10 @@ public:
     return line;
   }
 
-  void sendInitMessage(const std::string& username,
-      boost::posix_time::time_duration timeout)
+  void sendCommandMessage(const std::string& command, const std::string& arg2,
+      boost::posix_time::time_duration timeout) // may be used as one with sendMsgToEverybody
   {
-    std::string message = "init\n" + username + "\n";
+    std::string message = command+ '\n' + arg2 + '\n';
 
 /*     Set a deadline for the asynchronous operation. Since this function uses
      a composed operation (async_write), the deadline applies to the entire
@@ -171,7 +171,7 @@ public:
     if (ec)
     {
       //throw boost::system::system_error(ec);
-      LOG("sendInitMessage error: "<<ec.message())
+      LOG("sendCommandMessage error: "<<ec.message())
     }
   }
 
