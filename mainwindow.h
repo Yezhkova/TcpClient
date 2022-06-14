@@ -25,6 +25,9 @@ private slots:
 
     void on_disconnectButton_clicked();
 
+signals:
+    void signal(QString temp);
+
 private:
     Ui::MainWindow      *ui;
     TcpBlockingClient   m_client;
