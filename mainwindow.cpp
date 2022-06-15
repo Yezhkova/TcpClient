@@ -27,7 +27,7 @@ void MainWindow::on_connectButton_clicked()
 
     m_client.sendCommandMessage("init", my_username, boost::posix_time::pos_infin);
     LOG(my_username)
-    //ui->connectButton->setEnabled(false);
+    ui->connectButton->setEnabled(false);
     //in a separate thread
     ui->sendButton->setEnabled(true);
 
@@ -56,10 +56,10 @@ void MainWindow::on_connectButton_clicked()
                     emit signal(QString::fromStdString(tmp));
                 }
 
-                else if (command == "retry")
-                {
-                    this->close();
-                }
+//                else if (command == "retry")
+//                {
+//                    this->close();
+//                }
             }
         }
         catch ( std::runtime_error &e) // catch everything
