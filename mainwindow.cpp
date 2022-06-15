@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(this, &MainWindow::signal, ui->feed, &QTextEdit::append);
-    ui->sendButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -28,8 +27,9 @@ void MainWindow::on_connectButton_clicked()
     m_client.sendCommandMessage("init", my_username, boost::posix_time::pos_infin);
     LOG(my_username)
     ui->connectButton->setEnabled(false);
-    //in a separate thread
     ui->sendButton->setEnabled(true);
+
+    //in a separate thread
 
     m_readThread = std::thread( [this] {
         try
@@ -56,10 +56,6 @@ void MainWindow::on_connectButton_clicked()
                     emit signal(QString::fromStdString(tmp));
                 }
 
-//                else if (command == "retry")
-//                {
-//                    this->close();
-//                }
             }
         }
         catch ( std::runtime_error &e) // catch everything

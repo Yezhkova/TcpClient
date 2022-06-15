@@ -42,6 +42,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="sendButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>569</x>
