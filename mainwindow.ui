@@ -23,9 +23,9 @@
    <widget class="QTextEdit" name="typeMessage">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>159</x>
       <y>535</y>
-      <width>410</width>
+      <width>401</width>
       <height>35</height>
      </rect>
     </property>
@@ -38,7 +38,8 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid grey;</string>
+     <string notr="true">border: transparent;
+border-radius: 7px;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="sendButton">
@@ -90,6 +91,9 @@ QPushButton:disabled
      <font>
       <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: transparent;</string>
     </property>
    </widget>
    <widget class="QLabel" name="myUsernameLabel">
