@@ -28,6 +28,7 @@ void MainWindow::on_connectButton_clicked()
     LOG(my_username)
     ui->connectButton->setEnabled(false);
     ui->sendButton->setEnabled(true);
+    ui->disconnectButton->setEnabled(true);
 
     //in a separate thread
 

@@ -38,8 +38,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: transparent;
-border-radius: 7px;</string>
+     <string notr="true">border: transparent;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="sendButton">
@@ -275,6 +274,9 @@ QPushButton:disabled
     </property>
    </widget>
    <widget class="QPushButton" name="disconnectButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -290,9 +292,19 @@ QPushButton:disabled
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:  #ff9933;
-color: black;
-border-radius: 7px;</string>
+     <string notr="true">QPushButton
+{
+	background-color:  #ff9933;
+	color: black;
+	border-radius: 7px;
+}
+
+QPushButton:disabled
+{
+  background-color:#ffbf80;
+  border-radius: 7px;
+  color: grey;
+}</string>
     </property>
     <property name="text">
      <string>Disсonnect</string>
